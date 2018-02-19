@@ -2,18 +2,28 @@ import { ISimpleExecutorResult } from 'gooddata';
 import { AFM } from '@gooddata/typings';
 
 import { DataTable } from '../DataTable';
+import { IDataSource } from '../interfaces/DataSource';
 import { DummyAdapter } from '../utils/DummyAdapter';
+import { DummyDataSource } from '../utils/DummyDataSource';
 
 describe('DataTable', () => {
     const dataResponse: ISimpleExecutorResult = { rawData: [['1', '2', '3']] };
     const afm: AFM.IAfm = {
+        attributes: [
+            {
+                localIdentifier: 'a1-local-identifier',
+                displayForm: {
+                    identifier: 'a1-identifier'
+                }
+            }
+        ],
         measures: [
             {
-                localIdentifier: 'a',
+                localIdentifier: 'm1-local-identifier',
                 definition: {
                     measure: {
                         item: {
-                            identifier: 'b'
+                            identifier: 'm1-identifier'
                         }
                     }
                 }
@@ -35,28 +45,27 @@ describe('DataTable', () => {
         ]
     };
     const nonExecutableAfm: AFM.IAfm = {};
-    const resultSpec: AFM.IResultSpec = {};
+    const emptyResultSpec: AFM.IResultSpec = {};
+
+    const setupDataTable = (success = true, dataSource: any = null, dataCb = jest.fn()) => {
+        const dt = new DataTable(new DummyAdapter(dataResponse, success, dataSource));
+        const errCb = jest.fn();
+
+        dt.onData(dataCb);
+        dt.onError(errCb);
+
+        return {
+            dt,
+            dataCb,
+            errCb
+        };
+    };
 
     describe('Events', () => {
-        const setupDataTable = (success = true) => {
-            const dt = new DataTable(new DummyAdapter(dataResponse, success));
-            const dataCb = jest.fn();
-            const errCb = jest.fn();
-
-            dt.onData(dataCb);
-            dt.onError(errCb);
-
-            return {
-                dt,
-                dataCb,
-                errCb
-            };
-        };
-
         it('should return data via onData callback', (done) => {
             const { dt, errCb, dataCb } = setupDataTable();
 
-            dt.getData(afm, resultSpec);
+            dt.getData(afm, emptyResultSpec);
 
             setTimeout(() => {
                 expect(errCb).not.toBeCalled();
@@ -69,7 +78,7 @@ describe('DataTable', () => {
         it('should dispatch onError callback when error occurs', (done) => {
             const { dt, errCb, dataCb } = setupDataTable(false);
 
-            dt.getData(afm, resultSpec);
+            dt.getData(afm, emptyResultSpec);
 
             setTimeout(() => {
                 expect(dataCb).not.toBeCalled();
@@ -82,7 +91,7 @@ describe('DataTable', () => {
         it('should not get new data for invalid AFM', (done) => {
             const { dt, errCb, dataCb } = setupDataTable();
 
-            dt.getData(nonExecutableAfm, resultSpec);
+            dt.getData(nonExecutableAfm, emptyResultSpec);
 
             setTimeout(() => {
                 expect(dataCb).not.toBeCalled();
@@ -102,7 +111,7 @@ describe('DataTable', () => {
                 .resetDataSubscribers()
                 .resetErrorSubscribers();
 
-            dt.getData(nonExecutableAfm, resultSpec);
+            dt.getData(nonExecutableAfm, emptyResultSpec);
 
             setTimeout(() => {
                 expect(dataCb).not.toBeCalled();
@@ -115,8 +124,8 @@ describe('DataTable', () => {
         it('should call handler only once', (done) => {
             const { dt, errCb, dataCb } = setupDataTable();
 
-            dt.getData(afm, resultSpec);
-            dt.getData(afm2, resultSpec);
+            dt.getData(afm, emptyResultSpec);
+            dt.getData(afm2, emptyResultSpec);
 
             setTimeout(() => {
                 try {
@@ -128,6 +137,124 @@ describe('DataTable', () => {
                     done(error);
                 }
             }, 0);
+        });
+    });
+
+    describe('ResultSpec', () => {
+        function getDummyDataSource() {
+            return new DummyDataSource<any>(dataResponse, true);
+        }
+
+        function getDataTable(dataSource: IDataSource<any>) {
+            return new DataTable(new DummyAdapter(dataResponse, true, dataSource));
+        }
+
+        it('should use default dimensions for table, when no resultSpec is defined', (done) => {
+            const dataSource = getDummyDataSource();
+            const dt = getDataTable(dataSource);
+
+            dt.onError(done);
+            dt.onData(() => {
+                try {
+                    expect(dataSource.getResultSpec()).toEqual(
+                        {
+                            dimensions: [
+                                {
+                                    itemIdentifiers: [
+                                        'a1-local-identifier'
+                                    ]
+                                },
+                                {
+                                    itemIdentifiers: [
+                                        'measureGroup'
+                                    ]
+                                }
+                            ]
+                        }
+                    );
+                    done();
+                } catch (error) {
+                    done(error);
+                }
+            });
+            dt.getData(afm, emptyResultSpec);
+        });
+
+        it('should use default dimensions for table, when no dimensions is defined', (done) => {
+            const resultSpecWithoutDimensions: AFM.IResultSpec = {
+                sorts: [
+                    {
+                        attributeSortItem: {
+                            direction: 'desc',
+                            attributeIdentifier: 'a1-local-identifier'
+                        }
+                    }
+                ]
+            };
+
+            const dataSource = getDummyDataSource();
+            const dt = getDataTable(dataSource);
+
+            dt.onError(done);
+            dt.onData(() => {
+                try {
+                    expect(dataSource.getResultSpec()).toEqual(
+                        {
+                            dimensions: [
+                                {
+                                    itemIdentifiers: [
+                                        'a1-local-identifier'
+                                    ]
+                                },
+                                {
+                                    itemIdentifiers: [
+                                        'measureGroup'
+                                    ]
+                                }
+                            ],
+                            sorts: [
+                                {
+                                    attributeSortItem: {
+                                        direction: 'desc',
+                                        attributeIdentifier: 'a1-local-identifier'
+                                    }
+                                }
+                            ]
+                        }
+                    );
+                    done();
+                } catch (error) {
+                    done(error);
+                }
+            });
+            dt.getData(afm, resultSpecWithoutDimensions);
+        });
+
+        it('should use custom defined dimensions', (done) => {
+            const baseChartResultSpec: AFM.IResultSpec = {
+                dimensions: [
+                    {
+                        itemIdentifiers: ['measureGroup']
+                    },
+                    {
+                        itemIdentifiers: (afm.attributes).map(a => a.localIdentifier)
+                    }
+                ]
+            };
+
+            const dataSource = getDummyDataSource();
+            const dt = getDataTable(dataSource);
+
+            dt.onError(done);
+            dt.onData(() => {
+                try {
+                    expect(dataSource.getResultSpec()).toEqual(baseChartResultSpec);
+                    done();
+                } catch (error) {
+                    done(error);
+                }
+            });
+            dt.getData(afm, baseChartResultSpec);
         });
     });
 });

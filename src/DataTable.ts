@@ -1,3 +1,5 @@
+import get = require('lodash/get');
+import isEmpty = require('lodash/isEmpty');
 import isEqual = require('lodash/isEqual');
 import { AFM } from '@gooddata/typings';
 
@@ -10,6 +12,17 @@ export type IDataSubscriber = (data: any) => void;
 export type IErrorSubscriber = (error: any) => void;
 
 export class DataTable<T> {
+    private static getDefaultDimensionsForTable(afm: AFM.IAfm): AFM.IDimension[] {
+        return [
+            {
+                itemIdentifiers: (afm.attributes || []).map(a => a.localIdentifier)
+            },
+            {
+                itemIdentifiers: ['measureGroup']
+            }
+        ];
+    }
+
     private adapter: IAdapter<T>;
 
     private dataSubscribers: IDataSubscriber[] = [];
@@ -33,6 +46,10 @@ export class DataTable<T> {
     public getData(afm: AFM.IAfm, resultSpec: AFM.IResultSpec) {
         if (!isAfmExecutable(afm)) {
             return;
+        }
+
+        if (isEmpty(get(resultSpec, 'dimensions'))) {
+            resultSpec.dimensions = DataTable.getDefaultDimensionsForTable(afm);
         }
 
         if (!isEqual(afm, this.afm)) {
