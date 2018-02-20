@@ -46,6 +46,18 @@ describe('DataTable', () => {
     };
     const nonExecutableAfm: AFM.IAfm = {};
     const emptyResultSpec: AFM.IResultSpec = {};
+    const defaultDimensionsForTable: AFM.IDimension[] = [
+        {
+            itemIdentifiers: [
+                'a1-local-identifier'
+            ]
+        },
+        {
+            itemIdentifiers: [
+                'measureGroup'
+            ]
+        }
+    ];
 
     const setupDataTable = (success = true, dataSource: any = null, dataCb = jest.fn()) => {
         const dt = new DataTable(new DummyAdapter(dataResponse, success, dataSource));
@@ -149,6 +161,22 @@ describe('DataTable', () => {
             return new DataTable(new DummyAdapter(dataResponse, true, dataSource));
         }
 
+        it('should use default dimensions for table, when no resultSpec is passed', (done) => {
+            const dataSource = getDummyDataSource();
+            const dt = getDataTable(dataSource);
+
+            dt.onError(done);
+            dt.onData(() => {
+                try {
+                    expect(dataSource.getResultSpec()).toEqual({ dimensions: defaultDimensionsForTable });
+                    done();
+                } catch (error) {
+                    done(error);
+                }
+            });
+            dt.getData(afm);
+        });
+
         it('should use default dimensions for table, when no resultSpec is defined', (done) => {
             const dataSource = getDummyDataSource();
             const dt = getDataTable(dataSource);
@@ -156,22 +184,7 @@ describe('DataTable', () => {
             dt.onError(done);
             dt.onData(() => {
                 try {
-                    expect(dataSource.getResultSpec()).toEqual(
-                        {
-                            dimensions: [
-                                {
-                                    itemIdentifiers: [
-                                        'a1-local-identifier'
-                                    ]
-                                },
-                                {
-                                    itemIdentifiers: [
-                                        'measureGroup'
-                                    ]
-                                }
-                            ]
-                        }
-                    );
+                    expect(dataSource.getResultSpec()).toEqual({ dimensions: defaultDimensionsForTable });
                     done();
                 } catch (error) {
                     done(error);
@@ -200,18 +213,7 @@ describe('DataTable', () => {
                 try {
                     expect(dataSource.getResultSpec()).toEqual(
                         {
-                            dimensions: [
-                                {
-                                    itemIdentifiers: [
-                                        'a1-local-identifier'
-                                    ]
-                                },
-                                {
-                                    itemIdentifiers: [
-                                        'measureGroup'
-                                    ]
-                                }
-                            ],
+                            dimensions: defaultDimensionsForTable,
                             sorts: [
                                 {
                                     attributeSortItem: {

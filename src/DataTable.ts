@@ -43,7 +43,7 @@ export class DataTable<T> {
         );
     }
 
-    public getData(afm: AFM.IAfm, resultSpec: AFM.IResultSpec) {
+    public getData(afm: AFM.IAfm, resultSpec: AFM.IResultSpec = {}) {
         if (!isAfmExecutable(afm)) {
             return;
         }
