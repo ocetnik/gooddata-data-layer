@@ -12,8 +12,10 @@ export const empty: IFixture = {
     resultSpec: {}
 };
 
-export const METRIC_ID_URI = '/gdc/md/project/obj/metric.id';
+export const METRIC_IDENTIFIER = 'metric.id';
+export const METRIC_URI = '/gdc/md/project/obj/metric.id';
 export const ATTRIBUTE_DISPLAY_FORM_URI = '/gdc/md/project/obj/1';
+export const ATTRIBUTE_DISPLAY_FORM_IDENTIFIER = '1';
 export const ATTRIBUTE_URI = '/gdc/md/project/obj/11';
 export const ATTRIBUTE_DISPLAY_FORM_URI_2 = '/gdc/md/project/obj/2';
 export const ATTRIBUTE_URI_2 = '/gdc/md/project/obj/22';
@@ -29,7 +31,27 @@ export const simpleMeasure: IFixture = {
                 definition: {
                     measure: {
                         item: {
-                            uri: METRIC_ID_URI
+                            uri: METRIC_URI
+                        }
+                    }
+                },
+                alias: 'Measure M1'
+            }
+        ]
+    },
+    resultSpec: {
+    }
+};
+
+export const simpleMeasureWithIdentifiers: IFixture = {
+    afm: {
+        measures: [
+            {
+                localIdentifier: 'm1',
+                definition: {
+                    measure: {
+                        item: {
+                            identifier: METRIC_IDENTIFIER
                         }
                     }
                 },
@@ -49,7 +71,7 @@ export const renamedMeasure: IFixture = {
                 definition: {
                     measure: {
                         item: {
-                            uri: METRIC_ID_URI
+                            uri: METRIC_URI
                         }
                     }
                 },
@@ -69,7 +91,7 @@ export const filteredMeasure: IFixture = {
                 definition: {
                     measure: {
                         item: {
-                            uri: METRIC_ID_URI
+                            uri: METRIC_URI
                         },
                         filters: [
                             {
@@ -102,7 +124,7 @@ export const measureWithRelativeDate: IFixture = {
                 definition: {
                     measure: {
                         item: {
-                            uri: METRIC_ID_URI
+                            uri: METRIC_URI
                         },
                         filters: [
                             {
@@ -145,7 +167,7 @@ export const measureWithAbsoluteDate: IFixture = {
                 definition: {
                     measure: {
                         item: {
-                            uri: METRIC_ID_URI
+                            uri: METRIC_URI
                         },
                         filters: [
                             {
@@ -199,7 +221,7 @@ export const popMeasure: IFixture = {
                 definition: {
                     measure: {
                         item: {
-                            uri: METRIC_ID_URI
+                            uri: METRIC_URI
                         }
                     }
                 },
@@ -254,7 +276,7 @@ export const popMeasureWithSorting: IFixture = {
                 definition: {
                     measure: {
                         item: {
-                            uri: METRIC_ID_URI
+                            uri: METRIC_URI
                         }
                     }
                 },
@@ -298,7 +320,7 @@ export const showInPercent: IFixture = {
                 definition: {
                     measure: {
                         item: {
-                            uri: METRIC_ID_URI
+                            uri: METRIC_URI
                         },
                         computeRatio: true
                     }
@@ -329,7 +351,7 @@ export const showInPercentWithDate: IFixture = {
                 definition: {
                     measure: {
                         item: {
-                            uri: METRIC_ID_URI
+                            uri: METRIC_URI
                         },
                         computeRatio: true
                     }
@@ -358,7 +380,7 @@ export const measureWithSorting: IFixture = {
                 definition: {
                     measure: {
                         item: {
-                            uri: METRIC_ID_URI
+                            uri: METRIC_URI
                         }
                     }
                 },
@@ -501,7 +523,7 @@ export const stackingAttribute: IFixture = {
                 definition: {
                     measure: {
                         item: {
-                            uri: METRIC_ID_URI
+                            uri: METRIC_URI
                         },
                         aggregation: 'sum'
                     }
@@ -558,7 +580,7 @@ export const stackingRenamedAttribute: IFixture = {
                 definition: {
                     measure: {
                         item: {
-                            uri: METRIC_ID_URI
+                            uri: METRIC_URI
                         },
                         aggregation: 'sum'
                     }
@@ -694,7 +716,7 @@ export const segmentedAndTrendedLineChart: IFixture = {
                 definition: {
                     measure: {
                         item: {
-                            uri: METRIC_ID_URI
+                            uri: METRIC_URI
                         },
                         aggregation: 'sum'
                     }
@@ -728,7 +750,7 @@ export const measuresOnlyPieChart: IFixture = {
                 definition: {
                     measure: {
                         item: {
-                            uri: METRIC_ID_URI
+                            uri: METRIC_URI
                         }
                     }
                 },
@@ -739,7 +761,7 @@ export const measuresOnlyPieChart: IFixture = {
                 definition: {
                     measure: {
                         item: {
-                            uri: METRIC_ID_URI
+                            uri: METRIC_URI
                         }
                     }
                 },
@@ -759,7 +781,7 @@ export const oneMeasureOneAttribute: IFixture = {
                     measure: {
                         aggregation: 'sum',
                         item: {
-                            uri: METRIC_ID_URI
+                            uri: METRIC_URI
                         }
                     }
                 },
@@ -778,6 +800,34 @@ export const oneMeasureOneAttribute: IFixture = {
     resultSpec: {}
 };
 
+export const oneMeasureOneAttributeWithIdentifiers: IFixture = {
+    afm: {
+        measures: [
+            {
+                localIdentifier: 'm1',
+                definition: {
+                    measure: {
+                        aggregation: 'sum',
+                        item: {
+                            identifier: METRIC_IDENTIFIER
+                        }
+                    }
+                },
+                alias: 'Sum of Bundle cost'
+            }
+        ],
+        attributes: [
+            {
+                localIdentifier: 'a1',
+                displayForm: {
+                    identifier: ATTRIBUTE_DISPLAY_FORM_IDENTIFIER
+                }
+            }
+        ]
+    },
+    resultSpec: {}
+};
+
 export const reducedMultipleSorts: IFixture = {
     afm: {
         measures: [
@@ -787,7 +837,7 @@ export const reducedMultipleSorts: IFixture = {
                     measure: {
                         aggregation: 'sum',
                         item: {
-                            uri: METRIC_ID_URI
+                            uri: METRIC_URI
                         }
                     }
                 },
@@ -799,7 +849,7 @@ export const reducedMultipleSorts: IFixture = {
                     measure: {
                         aggregation: 'sum',
                         item: {
-                            uri: METRIC_ID_URI
+                            uri: METRIC_URI
                         }
                     }
                 },
