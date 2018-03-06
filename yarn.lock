@@ -931,9 +931,9 @@ globals@^9.18.0:
   version "9.18.0"
   resolved "https://registry.yarnpkg.com/globals/-/globals-9.18.0.tgz#aa3896b3e69b487f17e31ed2143d69a8e30c2d8a"
 
-gooddata@5.0.0-alpha3:
-  version "5.0.0-alpha3"
-  resolved "https://registry.yarnpkg.com/gooddata/-/gooddata-5.0.0-alpha3.tgz#a199967ee3a5bbed4a4a35d80ac05b98fb312c30"
+gooddata@5.0.0-alpha4:
+  version "5.0.0-alpha4"
+  resolved "https://registry.yarnpkg.com/gooddata/-/gooddata-5.0.0-alpha4.tgz#a655919f3eaad5a4f5d2be5ca4f3be35fbc2e721"
   dependencies:
     "@gooddata/typings" "1.0.0"
     es6-promise "3.0.2"
