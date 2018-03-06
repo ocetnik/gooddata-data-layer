@@ -1,5 +1,5 @@
-import {AFM, VisualizationObject} from '@gooddata/typings';
-import {IFixture} from '../fixtures/Afm.fixtures';
+import { AFM, VisualizationObject } from '@gooddata/typings';
+import { IFixture } from '../fixtures/Afm.fixtures';
 
 export const METRIC_ID_URI = '/gdc/md/project/obj/100';
 export const METRIC_ID_URI_2 = '/gdc/md/project/obj/101';
