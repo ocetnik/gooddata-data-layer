@@ -1,7 +1,5 @@
 import { AFM } from '@gooddata/typings';
-import {
-    IIdentifierUriPair
-} from 'gooddata';
+import * as GoodData from 'gooddata';
 
 export const m1Uri = '/gdc/md/projectId/obj/1';
 export const m2Uri = '/gdc/md/projectId/obj/2';
@@ -37,7 +35,7 @@ export const getObjectsMockedResponse = [
     }
 ];
 
-export const getUrisFromIdentifiersResponse: IIdentifierUriPair[] = [
+export const getUrisFromIdentifiersResponse: GoodData.IIdentifierUriPair[] = [
     {
         uri: m1Uri,
         identifier: m1Identifier
