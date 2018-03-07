@@ -7,9 +7,7 @@ function convertAttribute(attribute: VisualizationObject.IVisualizationAttribute
     const alias = attribute.visualizationAttribute.alias;
     const aliasProp = alias ? { alias } : {};
     return {
-        displayForm: {
-            uri: attribute.visualizationAttribute.displayForm.uri
-        },
+        displayForm: attribute.visualizationAttribute.displayForm,
         localIdentifier: attribute.visualizationAttribute.localIdentifier || `a${idx + 1}`,
         ...aliasProp
     };
@@ -68,9 +66,7 @@ function convertMeasure(measure: VisualizationObject.IMeasure): AFM.IMeasure {
 
         convertedDefinition = {
             measure: {
-                item: {
-                    uri: measureDefinition.item.uri
-                },
+                item: measureDefinition.item,
                 ...filtersProp,
                 ...aggregationProp,
                 ...computeRatioProp
@@ -83,9 +79,7 @@ function convertMeasure(measure: VisualizationObject.IMeasure): AFM.IMeasure {
         convertedDefinition = {
             popMeasure: {
                 measureIdentifier: popDefinition.measureIdentifier,
-                popAttribute: {
-                    uri: popDefinition.popAttribute.uri
-                }
+                popAttribute: popDefinition.popAttribute
             }
         };
     }
@@ -120,9 +114,7 @@ function convertVisualizationObjectFilter(filter: VisualizationObject.Visualizat
 
         return {
             absoluteDateFilter: {
-                dataSet: {
-                    uri: absoluteDateFilter.dataSet.uri
-                },
+                dataSet: absoluteDateFilter.dataSet,
                 from: String(absoluteDateFilter.from),
                 to: String(absoluteDateFilter.to)
             }
@@ -137,9 +129,7 @@ function convertVisualizationObjectFilter(filter: VisualizationObject.Visualizat
 
     return {
         relativeDateFilter: {
-            dataSet: {
-                uri: relativeDateFilter.dataSet.uri
-            },
+            dataSet: relativeDateFilter.dataSet,
             granularity: relativeDateFilter.granularity,
             from: Number(relativeDateFilter.from),
             to: Number(relativeDateFilter.to)

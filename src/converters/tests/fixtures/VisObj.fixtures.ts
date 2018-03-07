@@ -5,7 +5,9 @@ import {
     ATTRIBUTE_DISPLAY_FORM_URI_2,
     ATTRIBUTE_URI_2,
     DATE_DATA_SET_URI,
-    DATE_DISPLAY_FORM_URI
+    DATE_DISPLAY_FORM_URI,
+    METRIC_IDENTIFIER,
+    ATTRIBUTE_DISPLAY_FORM_IDENTIFIER
 } from './Afm.fixtures';
 
 const simpleMeasure: VisualizationObject.IVisualizationObjectContent = {
@@ -24,6 +26,31 @@ const simpleMeasure: VisualizationObject.IVisualizationObjectContent = {
                             measureDefinition: {
                                 item: {
                                     uri: '/gdc/md/project/obj/metric.id'
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        }]
+};
+
+const simpleMeasureWithIdentifiers: VisualizationObject.IVisualizationObjectContent = {
+    visualizationClass: {
+        uri: 'visClassUri'
+    },
+    buckets: [
+        {
+            localIdentifier: 'measures',
+            items: [
+                {
+                    measure: {
+                        localIdentifier: 'm1',
+                        alias: 'Measure M1',
+                        definition: {
+                            measureDefinition: {
+                                item: {
+                                    identifier: 'metric.id'
                                 }
                             }
                         }
@@ -881,6 +908,44 @@ const oneMeasureOneAttribute: VisualizationObject.IVisualizationObjectContent = 
     filters: []
 };
 
+const oneMeasureOneAttributeWithIdentifiers: VisualizationObject.IVisualizationObjectContent = {
+    visualizationClass: {
+        uri: 'visClassUri'
+    },
+    buckets: [
+        {
+            localIdentifier: 'measures',
+            items: [
+                {
+                    measure: {
+                        localIdentifier: 'm1',
+                        alias: 'Sum of Bundle cost',
+                        format: '#,##0.00',
+                        definition: {
+                            measureDefinition: {
+                                item: {
+                                    identifier: METRIC_IDENTIFIER
+                                },
+                                aggregation: 'sum'
+                            }
+                        }
+                    }
+                }
+            ]
+        }, {
+            localIdentifier: 'attributes',
+            items: [{
+                visualizationAttribute: {
+                    localIdentifier: 'a1',
+                    displayForm: {
+                        identifier: ATTRIBUTE_DISPLAY_FORM_IDENTIFIER
+                    }
+                }
+            }]
+        }],
+    filters: []
+};
+
 const multipleSorts: VisualizationObject.IVisualizationObjectContent = {
     visualizationClass: {
         uri: 'visClassUri'
@@ -928,11 +993,13 @@ const multipleSorts: VisualizationObject.IVisualizationObjectContent = {
 
 export const tables = {
     oneMeasureOneAttribute,
+    oneMeasureOneAttributeWithIdentifiers,
     multipleSorts
 };
 
 export const charts = {
     simpleMeasure,
+    simpleMeasureWithIdentifiers,
     simpleMeasureWithFormat,
     renamedMeasure,
     filteredMeasure,

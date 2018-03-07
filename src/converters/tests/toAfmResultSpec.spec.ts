@@ -1,5 +1,6 @@
 import {
     simpleMeasure,
+    simpleMeasureWithIdentifiers,
     renamedMeasure,
     filteredMeasure,
     measureWithAbsoluteDate,
@@ -21,6 +22,7 @@ import {
     dateFilter,
     dateFilterWithoutInterval,
     oneMeasureOneAttribute,
+    oneMeasureOneAttributeWithIdentifiers,
     reducedMultipleSorts
 } from './fixtures/Afm.fixtures';
 
@@ -31,6 +33,12 @@ describe('toAfmResultSpec', () => {
     it('should convert simple measures', () => {
         expect(toAfmResultSpec(charts.simpleMeasure)).toEqual({
             ...simpleMeasure
+        });
+    });
+
+    it('should convert simple measures with identifiers', () => {
+        expect(toAfmResultSpec(charts.simpleMeasureWithIdentifiers)).toEqual({
+            ...simpleMeasureWithIdentifiers
         });
     });
 
@@ -181,6 +189,12 @@ describe('toAfmResultSpec', () => {
     it('should convert table as generic chart, conversion has no semantic for buckets', () => {
         expect(toAfmResultSpec(tables.oneMeasureOneAttribute)).toEqual({
             ...oneMeasureOneAttribute
+        });
+    });
+
+    it('should convert table with identifiers', () => {
+        expect(toAfmResultSpec(tables.oneMeasureOneAttributeWithIdentifiers)).toEqual({
+            ...oneMeasureOneAttributeWithIdentifiers
         });
     });
 
